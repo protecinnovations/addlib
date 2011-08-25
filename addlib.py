@@ -1,6 +1,6 @@
 class Addlib(object):
 
-    def __init__self():
+    def __init__(self):
         self.__hostname = 'localhost'
         self.__username = 'root'
         self.__password = 'password'
