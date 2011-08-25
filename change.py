@@ -15,10 +15,11 @@ class Change(object):
         self.__doSql = parsed[root]['do']
         self.__undoSql = parsed[root]['undo']
         self.__redoSql = parsed[root]['redo']
+        self.__dependsOnPath = None
 
         if parsed[root]['depends'] != None:
             dependencyPath = os.path.dirname(changefile) + '/' + parsed[root]['depends']
-            self.__dependsOn = Change(dependencyPath)
+            self.__dependsOnPath = dependencyPath
 
     def getName(self):
         return self.__name
@@ -36,7 +37,7 @@ class Change(object):
         return self.__redoSql
 
     def getDependsOn(self):
-        return self.__dependsOn
+        return Change(self.__dependsOnPath)
 
     def setDependsOn(self, previous_change):
         """
