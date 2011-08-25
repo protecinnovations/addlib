@@ -1,3 +1,5 @@
+from change import Change
+
 class Addlib(object):
 
     def __init__(self):
@@ -22,4 +24,3 @@ class Addlib(object):
     def get_dependencies(change_name):
         """Get a list of changes that depend on the given change
         """
-

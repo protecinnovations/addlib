@@ -1,0 +1,5 @@
+Addlib requires PyYAML
+
+To install PyYAML:
+
+apt-get install python-yaml
