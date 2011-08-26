@@ -37,9 +37,19 @@ class Change(object):
         return self.__redoSql
 
     def get_depends_on(self):
-        if self.__dependsOnPath != None:
-            return Change(self.__dependsOnPath)
+        if self.__depends_on_path != None:
+            return Change(self.__depends_on_path)
         return None
+    
+    def depends_on(self, change):
+        if change == None and self.get_depends_on() == None:
+            return True
+        elif change == None or self.get_depends_on() == None:
+            return False
+        elif change.get_name() == self.get_depends_on().get_name():
+            return True
+        
+        return False
 
     def set_depends_on(self, previous_change):
         """
