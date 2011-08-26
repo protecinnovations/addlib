@@ -1,5 +1,3 @@
-from change import Change
-
 class Addlib(object):
 
     def __init__(self):

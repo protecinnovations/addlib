@@ -12,36 +12,36 @@ class Change(object):
 
         self.__name = root
         self.__description = parsed[root]['description']
-        self.__doSql = parsed[root]['do']
-        self.__undoSql = parsed[root]['undo']
-        self.__redoSql = parsed[root]['redo']
-        self.__dependsOnPath = None
+        self.__do_sql = parsed[root]['do']
+        self.__undo_sql = parsed[root]['undo']
+        self.__redo_sql = parsed[root]['redo']
+        self.__depends_on_path = None
 
         if parsed[root]['depends'] != None:
-            dependencyPath = os.path.dirname(changefile) + '/' + parsed[root]['depends']
-            self.__dependsOnPath = dependencyPath
+            dependency_path = os.path.dirname(changefile) + '/' + parsed[root]['depends']
+            self.__depends_on_path = dependency_path
 
-    def getName(self):
+    def get_name(self):
         return self.__name
 
-    def getDescription(self):
+    def get_description(self):
         return self.__description
 
-    def getDoSql(self):
+    def get_do_sql(self):
         return self.__doSql
 
-    def getUndoSql(self):
+    def get_undo_sql(self):
         return self.__undoSql
 
-    def getRedoSql(self):
+    def get_redo_sql(self):
         return self.__redoSql
 
-    def getDependsOn(self):
+    def get_depends_on(self):
         if self.__dependsOnPath != None:
             return Change(self.__dependsOnPath)
         return None
 
-    def setDependsOn(self, previous_change):
+    def set_depends_on(self, previous_change):
         """
         @previous_change Change
         Sets the change that this change depends on.
