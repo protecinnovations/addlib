@@ -54,19 +54,46 @@ class Addlib(object):
         """
         Have a look at a change and see if it is depended on by anything 
         """
-        print 'Checking change:\n' + self.describe_change(change)
+        print '\nChecking change:\n' + self.describe_change(change)
             
         dependents_of_change = self.find_dependencies_on(change)
 
         if len(dependents_of_change) > 1:
-            print '...which has more than one dependent change!'
-            # solve the problem....
-            exit()
+            self.solve_multiple_dependents(change)
         elif len(dependents_of_change) == 1:
-            print '...which has one dependent change, called "' + dependents_of_change[0].get_name() + '"'
+            print '...which has one dependent change, called "' + dependents_of_change[0].get_name() + '".'
+            self.check_for_dependents(dependents_of_change[0])
         else:
             print '...which has no dependent changes, so I\'m stopping.'
             # need to check that all changes have been checked - i.e. do we have a broken list?
+      
+    def solve_multiple_dependents(self, change):
+        """
+        Resolve situations where a change has more than one child
+        """
+        dependents_of_change = self.find_dependencies_on(change)
+        
+        if len(dependents_of_change) == 1:
+            pass
+        
+        print '...has the following dependents:\n'
+        
+        for i, a_change in enumerate(dependents_of_change):
+            print str(i+1) + ':\n' + self.describe_change(a_change) + '\n'
+            
+        print 'Please nominate a change to be the parent of the others...'
+        number = int(raw_input('> '))
+        
+        nominated = dependents_of_change[number-1]
+        
+        for a_change in dependents_of_change:
+            if a_change != nominated:
+                a_change.set_depends_on(nominated)
+                
+                a_change.persist()
+                
+        self.check_for_dependents(nominated)
+        
         
     def find_dependencies_on(self, change):
         """

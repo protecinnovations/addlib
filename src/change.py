@@ -16,6 +16,8 @@ class Change(object):
         self.__undo_sql = parsed[root]['undo']
         self.__redo_sql = parsed[root]['redo']
         self.__depends_on_path = None
+        self.__depends_on = None
+        self.__filename = changefile
 
         if parsed[root]['depends'] != None:
             dependency_path = os.path.dirname(changefile) + '/' + parsed[root]['depends']
@@ -28,17 +30,23 @@ class Change(object):
         return self.__description
 
     def get_do_sql(self):
-        return self.__doSql
+        return self.__do_sql
 
     def get_undo_sql(self):
-        return self.__undoSql
+        return self.__undo_sql
 
     def get_redo_sql(self):
-        return self.__redoSql
+        return self.__redo_sql
+    
+    def get_filename(self):
+        return self.__filename
 
     def get_depends_on(self):
-        if self.__depends_on_path != None:
+        if self.__depends_on != None:
+            return self.__depends_on
+        elif self.__depends_on_path != None:
             return Change(self.__depends_on_path)
+        
         return None
     
     def depends_on(self, change):
@@ -56,4 +64,25 @@ class Change(object):
         @previous_change Change
         Sets the change that this change depends on.
         """
-        self.__dependsOn = previous_change
+        self.__depends_on = previous_change
+    
+    def persist(self):
+        
+        stream = file(self.get_filename(), 'w')
+        
+        output = """%s:
+    description:    %s
+    depends:        %s
+    do: |
+        %s
+    undo: |
+        %s
+    redo: |
+        %s
+""" % (self.get_name(), self.get_description(), 
+        os.path.basename(self.get_depends_on().get_filename()), self.get_do_sql().replace('\n', '\n        '),
+        self.get_undo_sql().replace('\n', '\n        '), self.get_redo_sql().replace('\n', '\n        '))
+        
+        stream.write(output)
+        stream.close()
+        
