@@ -2,6 +2,9 @@ import yaml
 import os
 
 class Change(object):
+    """
+    Represents a single change to be deployed
+    """
 
     def __init__(self, changefile):
         # Parse the changefile and populate this object.
@@ -19,7 +22,7 @@ class Change(object):
         self.__depends_on = None
         self.__filename = changefile
 
-        if parsed[root]['depends'] != None:
+        if parsed[root]['depends'] is not None:
             dependency_path = os.path.dirname(changefile) + '/' + parsed[root]['depends']
             self.__depends_on_path = dependency_path
 
@@ -42,17 +45,17 @@ class Change(object):
         return self.__filename
 
     def get_depends_on(self):
-        if self.__depends_on != None:
+        if self.__depends_on is not None:
             return self.__depends_on
-        elif self.__depends_on_path != None:
+        elif self.__depends_on_path is not None:
             return Change(self.__depends_on_path)
         
         return None
     
     def depends_on(self, change):
-        if change == None and self.get_depends_on() == None:
+        if change is None and self.get_depends_on() is None:
             return True
-        elif change == None or self.get_depends_on() == None:
+        elif change is None or self.get_depends_on() is None:
             return False
         elif change.get_name() == self.get_depends_on().get_name():
             return True
