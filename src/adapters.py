@@ -10,8 +10,19 @@ class MySQL(object):
         self.__password = password
         self.__database = database
         
-    def execute(self, script):
-        pass
-        
+    def execute(self, changes):
+
+        # start transaction
+
+        for change in changes:
+            log_sql = ('INSERT INTO `addlib_log` SET `change_name`="%s", `action`="%s", ' +
+                'timestamp=%s, was_redo=%s;' % (change.get_name(), 'DO', time, 0))
+            
+
+
     def head(self):
+        """
+        Returns the most recent change that has been applied.
+        """
         pass
+    

@@ -1,0 +1,24 @@
+#!/usr/bin/env python
+from addlib import Addlib
+
+def fail():
+    print 'Addlib: I\'m sorry, I have no idea what you\'re trying to do.\n'
+    exit(1)
+
+if __name__ == "__main__":
+    import sys
+
+    if len(sys.argv) < 2:
+        fail()
+    else:
+
+        print '\n'
+
+        method_name = sys.argv[1]
+
+        if hasattr(Addlib, method_name):
+            getattr(Addlib, method_name)()
+        else:
+            fail()
+
+        
